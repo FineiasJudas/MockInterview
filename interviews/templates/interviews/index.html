@@ -1,0 +1,33 @@
+{% extends "interviews/layout.html" %}
+{% load static %}
+
+{% block title %}MockInterview - Home{% endblock %}
+
+{% block body %}
+<div class="text-center mt-5">
+    <h1>MockInterview</h1>
+    <p class="lead" style="font-size: 28px;color: rgb(61, 61, 61);">Prepare-se para entrevistas técnicas com simulados personalizados.</p>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'interviews:new_exam' %}" class="btn btn-primary btn-lg mt-3">Start New Exam</a>
+        <a href="{% url 'interviews:history' %}" class="btn btn-outline-secondary btn-lg mt-3">My History</a>
+    {% else %}
+        <a href="{% url 'interviews:register' %}" class="btn btn-primary btn-lg mt-3">Get Started</a>
+        <a href="{% url 'interviews:login' %}" class="btn btn-outline-primary btn-lg mt-3">Login</a>
+    {% endif %}
+</div>
+
+<div class="row mt-5">
+    <div class="col-12" style="text-align: center; margin-top: 10px;">
+        <h4>Available Categories</h4>
+    </div>
+    {% for category in categories %}
+    <div class="col-md-3 mt-3">
+        <div class="card text-center p-3">
+            <h5>{{ category.name }}</h5>
+            <small class="text-muted">{{ category.questions.count }} questions</small>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

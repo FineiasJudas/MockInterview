@@ -1,0 +1,27 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 10px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+#timer {
+    font-family: monospace;
+}
+
+.progress {
+    height: 24px;
+    border-radius: 12px;
+}
+
+@media (max-width: 576px) {
+    .display-3 {
+        font-size: 3rem;
+    }
+}

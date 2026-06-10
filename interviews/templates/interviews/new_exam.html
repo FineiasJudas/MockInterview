@@ -1,0 +1,44 @@
+{% extends "interviews/layout.html" %}
+
+{% block title %}New Exam{% endblock %}
+
+{% block body %}
+<h2>Configure Your Exam</h2>
+
+{% if message %}
+<div class="alert alert-danger">{{ message }}</div>
+{% endif %}
+
+<form method="post" action="{% url 'interviews:new_exam' %}">
+    {% csrf_token %}
+
+    <div class="form-group mt-3">
+        <label><strong>Select Categories:</strong></label>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-3 mt-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="categories" value="{{ category.id }}" id="cat-{{ category.id }}">
+                    <label class="form-check-label" for="cat-{{ category.id }}">
+                        {{ category.name }}
+                        <small class="text-muted">({{ category.questions.count }})</small>
+                    </label>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="form-group mt-3" style="max-width: 200px;">
+        <label><strong>Number of Questions:</strong></label>
+        <select name="num_questions" class="form-control">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Start Exam</button>
+</form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "interviews/layout.html" %}
+
+{% block title %}Result - Exam #{{ exam.id }}{% endblock %}
+
+{% block body %}
+<h2>Results — Exam #{{ exam.id }}</h2>
+
+<div class="card mt-3 p-4 text-center">
+    <h1 class="display-3">{{ result.score_percentage }}%</h1>
+    <p class="lead">{{ result.correct_answers }} correct out of {{ result.total_questions }}</p>
+    <p class="text-muted">Time: {{ exam.duration_seconds }}s</p>
+
+    {% if result.score_percentage >= 80 %}
+        <span class="badge badge-success p-2">Excellent!</span>
+    {% elif result.score_percentage >= 60 %}
+        <span class="badge badge-warning p-2">Good! Keep practicing</span>
+    {% else %}
+        <span class="badge badge-danger p-2">Keep studying</span>
+    {% endif %}
+</div>
+
+<h4 class="mt-4">Question Review</h4>
+{% for eq in exam_questions %}
+<div class="card mt-2 p-3 {% if eq.is_correct %}border-success{% else %}border-danger{% endif %}">
+    <p><strong>{{ forloop.counter }}. {{ eq.question.text }}</strong></p>
+    <p>Your answer: <strong>{{ eq.answer_given|upper }}</strong>
+        {% if eq.is_correct %}{% else %}(correct: {{ eq.question.correct_option|upper }}){% endif %}
+    </p>
+    {% if eq.question.explanation %}
+    <small class="text-muted">! {{ eq.question.explanation }}</small>
+    {% endif %}
+</div>
+{% endfor %}
+
+<div class="mt-4 mb-4" style="margin-bottom: 10px;">
+    <a href="{% url 'interviews:new_exam' %}" class="btn btn-primary">New Exam</a>
+    <a href="{% url 'interviews:history' %}" class="btn btn-outline-secondary">History</a>
+    <a href="{% url 'interviews:stats' %}" class="btn btn-outline-info">My Stats</a>
+</div>
+{% endblock %}

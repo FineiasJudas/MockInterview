@@ -1,0 +1,71 @@
+{% extends "interviews/layout.html" %}
+
+{% block title %}My Stats{% endblock %}
+
+{% block body %}
+<h2>My Stats by Category</h2>
+
+{% if stats %}
+<canvas id="statsChart" style="max-width: 600px; max-height: 400px; margin-top: 10px;"></canvas>
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Questions Answered</th>
+            <th>Correct</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for stat in stats %}
+        {% if stat.total > 0 %}
+        <tr>
+            <td>{{ stat.category }}</td>
+            <td>{{ stat.total }}</td>
+            <td>{{ stat.correct }}</td>
+            <td>
+                <div class="progress">
+                    <div class="progress-bar {% if stat.percentage >= 80 %}bg-success{% elif stat.percentage >= 60 %}bg-warning{% else %}bg-danger{% endif %}"
+                         style="width: {{ stat.percentage }}%">
+                        {{ stat.percentage }}%
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p class="mt-3 text-muted">No stats yet. <a href="{% url 'interviews:new_exam' %}">Start an exam!</a></p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = [{% for stat in stats %}{% if stat.total > 0 %}"{{ stat.category }}",{% endif %}{% endfor %}];
+    const data = [{% for stat in stats %}{% if stat.total > 0 %}{{ stat.percentage }},{% endif %}{% endfor %}];
+
+    if (labels.length > 0) {
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Score (%)',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+    }
+</script>
+{% endblock %}
