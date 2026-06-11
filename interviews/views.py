@@ -9,8 +9,6 @@ import random
 from .models import User, Category, Question, Exam, ExamQuestion, Result
 
 
-# ─── Auth ────────────────────────────────────────────────────────────────────
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -48,15 +46,11 @@ def register(request):
     return render(request, 'interviews/register.html')
 
 
-# ─── Main ─────────────────────────────────────────────────────────────────────
-
 def index(request):
     return render(request, 'interviews/index.html', {
         'categories': Category.objects.all()
     })
 
-
-# ─── Exam ─────────────────────────────────────────────────────────────────────
 
 @login_required
 def new_exam(request):
@@ -71,13 +65,11 @@ def new_exam(request):
                 'message': 'Select at least one category.'
             })
 
-        # Cria o exame
         exam = Exam.objects.create(user=request.user)
         categories = Category.objects.filter(id__in=category_ids)
         exam.categories.set(categories)
         exam.save()
 
-        # Gera perguntas aleatórias das categorias escolhidas
         questions = list(Question.objects.filter(category__in=categories))
         random.shuffle(questions)
         selected = questions[:num_questions]
@@ -132,7 +124,7 @@ def submit_exam(request):
 
     data = json.loads(request.body)
     exam_id = data.get('exam_id')
-    answers = data.get('answers', {})  # { "exam_question_id": "a", ... }
+    answers = data.get('answers', {})
     duration = data.get('duration', 0)
 
     exam = Exam.objects.get(id=exam_id)
@@ -190,8 +182,6 @@ def result(request, exam_id):
         'exam_questions': exam_questions
     })
 
-
-# ─── Histórico e Estatísticas ─────────────────────────────────────────────────
 
 @login_required
 def history(request):

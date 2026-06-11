@@ -6,8 +6,8 @@ class User(AbstractUser):
         app_label = 'interviews'
 
 class Category(models.Model):
-    name = models.CharField(max_length=64)  # React, Django, SQL, JavaScript, etc.
-    icon = models.CharField(max_length=64, blank=True)  # ex: "fab fa-react"
+    name = models.CharField(max_length=64)
+    icon = models.CharField(max_length=64, blank=True)
 
     def __str__(self):
         return self.name
@@ -26,9 +26,9 @@ class Question(models.Model):
     option_b = models.CharField(max_length=256)
     option_c = models.CharField(max_length=256)
     option_d = models.CharField(max_length=256)
-    correct_option = models.CharField(max_length=1)  # 'a', 'b', 'c' ou 'd'
+    correct_option = models.CharField(max_length=1)
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='medium')
-    explanation = models.TextField(blank=True)  # explicação da resposta correta
+    explanation = models.TextField(blank=True)
 
     def get_options(self):
         return [
@@ -47,7 +47,7 @@ class Exam(models.Model):
     categories = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
     completed = models.BooleanField(default=False)
-    duration_seconds = models.IntegerField(default=0)  # tempo gasto pelo utilizador
+    duration_seconds = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Exam #{self.id} by {self.user.username}"
