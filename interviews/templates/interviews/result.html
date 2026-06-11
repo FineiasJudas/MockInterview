@@ -21,13 +21,15 @@
 
 <h4 class="mt-4">Question Review</h4>
 {% for eq in exam_questions %}
-<div class="card mt-2 p-3 {% if eq.is_correct %}border-success{% else %}border-danger{% endif %}">
+<div class="card mt-2 p-3 {% if eq.is_correct %}border-success{% else %}border-danger{% endif %}" style="display: block;">
     <p><strong>{{ forloop.counter }}. {{ eq.question.text }}</strong></p>
     <p>Your answer: <strong>{{ eq.answer_given|upper }}</strong>
         {% if eq.is_correct %}{% else %}(correct: {{ eq.question.correct_option|upper }}){% endif %}
     </p>
     {% if eq.question.explanation %}
-    <small class="text-muted">! {{ eq.question.explanation }}</small>
+    <div class="mt-2 p-2" style="display: inline-block; background-color: rgb(230, 227, 227); border-radius: 4px;">
+        <small style=" font-style: italic;">! {{ eq.question.explanation }}</small>
+    </div>
     {% endif %}
 </div>
 {% endfor %}
